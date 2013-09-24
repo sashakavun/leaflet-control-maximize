@@ -1,0 +1,10 @@
+{
+    "name": "leaflet-control-maximize",
+    "version": "0.1",
+    "description": "Maximize control for Leaflet library",
+    "main": "L.Control.Maximize.js",
+    "repository": {
+       "type": "git",
+        "url": "git://github.com/keta/L.Control.Maximize.git"
+    }
+}

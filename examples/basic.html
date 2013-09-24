@@ -1,0 +1,51 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf8">
+    <title>Leaflet.Control.Maximize - Basic Example</title>
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.css"/>
+    <!--[if lte IE 8]>
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.ie.css"/>
+    <![endif]-->
+</head>
+<body>
+<h1>Leaflet.Control.Maximize</h1>
+
+<h2>Classic way</h2>
+
+<pre>
+// Create map
+var map = L.map("map", {
+    layers: [L.tileLayer("http://{s}.tile.osm.org/{z}/{x}/{y}.png")],
+    center: [51.505, -0.09],
+    zoom: 13
+});
+
+// Add maximize control
+L.control.maximize().addTo(map);
+</pre>
+
+<div id="map" style="width:600px;height:300px"></div>
+
+<script src="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.js"></script>
+<script src="../L.Control.Maximize.js"></script>
+<script>
+    (function () {
+        // Create map
+        var map = L.map("map", {
+            layers: [L.tileLayer("http://{s}.tile.osm.org/{z}/{x}/{y}.png")],
+            center: [51.505, -0.09],
+            zoom: 13
+        });
+
+        // Add maximize control
+        L.control.maximize().addTo(map);
+    })();
+</script>
+<script>
+    for (var i = 0; i < 50; i += 1) {
+        document.writeln("<p>Additional line to add vertical scrollbar.</p>");
+    }
+</script>
+</body>
+</html>
