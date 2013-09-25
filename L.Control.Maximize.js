@@ -30,26 +30,39 @@
             return this._createButton();
         },
 
+        /**
+         * Creates button DOM element.
+         * @returns {HTMLDivElement}
+         * @private
+         */
         _createButton: function () {
             var container = L.DomUtil.create("div", "leaflet-control-maximize leaflet-bar leaflet-control");
-            var button = L.DomUtil.create("a", "leaflet-control-maximize-button", container);
 
+            var button = L.DomUtil.create("a", "leaflet-control-maximize-button", container);
             button.innerHTML = "❐";
             button.href = "#";
             button.title = this.options.title;
-
             L.DomEvent.on(button, "click", this._onClick, this);
 
             return container;
         },
 
+        /**
+         * Button click event listener.
+         * @param {MouseEvent} ev
+         * @private
+         */
         _onClick: function (ev) {
             this._map.toggleMaximized();
             L.DomEvent.preventDefault(ev);
         }
     });
 
-    // Control factory method
+    /**
+     * Maximize Control factory.
+     * @param {object} options
+     * @returns {L.Control.Maximize}
+     */
     L.control.maximize = function (options) {
         return new L.Control.Maximize(options);
     };
@@ -66,7 +79,7 @@
          * @returns {boolean}
          */
         isMaximized: function () {
-            // Explicitly casting to boolean
+            // Explicit casting to boolean
             return !!this._isMaximized;
         },
 
