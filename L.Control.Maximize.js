@@ -112,7 +112,7 @@
                 this._restoreStyleLeft = styles.left;
 
                 // Apply container styles
-                styles.position = "fixed";
+                styles.position = "absolute";
                 styles.width = "auto";
                 styles.height = "auto";
                 styles.top = "0";
@@ -121,7 +121,15 @@
                 styles.left = "0";
 
                 // Hide scrollbars
+                this._restoreBodyElement = (document.documentElement.scrollTop || document.documentElement.scrollLeft)
+                    ? document.documentElement // Firefox, IE, Opera 12
+                    : document.body; // Webkit
+                this._restoreBodyScrollTop = this._restoreBodyElement.scrollTop;
+                this._restoreBodyScrollLeft = this._restoreBodyElement.scrollLeft;
                 this._restoreBodyOverflow = document.body.style.overflow;
+
+                this._restoreBodyElement.scrollTop = 0;
+                this._restoreBodyElement.scrollLeft = 0;
                 document.body.style.overflow = "hidden";
 
                 this._isMaximized = true;
@@ -147,6 +155,8 @@
 
                 // Restore scrollbars
                 document.body.style.overflow = this._restoreBodyOverflow;
+                this._restoreBodyElement.scrollTop = this._restoreBodyScrollTop;
+                this._restoreBodyElement.scrollLeft = this._restoreBodyScrollLeft;
 
                 this._isMaximized = false;
                 this.fire("maximizedstatechange");
