@@ -26,7 +26,11 @@ var map = L.map("map", { maximizeControl: true });
 API
 ---
 
-Plugin introduces `maximizeControl` boolean option. If it set to `true`, map will be created with maximize control.
+Plugin introduces following `L.Map` options:
+
+`maximizeControl` If it set to `true`, map will be created with maximize control (`false` by default).
+
+`restoreFromMaximizedOnEsc` If set to `true`, map can be restored to the original state from maximized by pressing Esc key (`true` by default).
 
 Following `L.Map` methods are available regardless of whether button is added to the map or not:
 
