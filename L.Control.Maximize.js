@@ -69,7 +69,8 @@
 
     // Map option
     L.Map.mergeOptions({
-        maximizeControl: false
+        maximizeControl: false,
+        restoreFromMaximizedOnEsc: true
     });
 
     // Map methods for maximizing
@@ -150,6 +151,12 @@
                 this._isMaximized = false;
                 this.fire("maximizedstatechange");
             }
+        },
+
+        _maximizedStateKeyHandler: function (ev) {
+            if (this.options.restoreFromMaximizedOnEsc && this.isMaximized() && (ev.keyCode === 27)) {
+                this.toggleMaximized();
+            }
         }
     });
 
@@ -163,6 +170,15 @@
 
         // Updates map on maximization and restore
         this.on("maximizedstatechange", this.invalidateSize, this);
+
+        // Adds key press handler to catch Esc
+        this.on("maximizedstatechange", function () {
+            if (this.isMaximized()) {
+                L.DomEvent.on(document.body, "keyup", this._maximizedStateKeyHandler, this);
+            } else {
+                L.DomEvent.off(document.body, "keyup", this._maximizedStateKeyHandler, this);
+            }
+        }, this);
     });
 
 })();
