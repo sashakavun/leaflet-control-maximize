@@ -124,7 +124,7 @@
                 document.body.style.overflow = "hidden";
 
                 this._isMaximized = true;
-                this.fire("maximizedstatechange", { maximized: true });
+                this.fire("maximizedstatechange");
             }
         },
 
@@ -148,7 +148,7 @@
                 document.body.style.overflow = this._restoreBodyOverflow;
 
                 this._isMaximized = false;
-                this.fire("maximizedstatechange", { maximized: false });
+                this.fire("maximizedstatechange");
             }
         }
     });
