@@ -13,6 +13,69 @@
     "use strict";
 
     /**
+     * Applies style rules to the DOM object. Returns original rules.
+     * @param {HTMLElement} target HTML element
+     * @param {object} rules CSS rules
+     * @returns {object}
+     */
+    var applyStyles = function (target, rules) {
+        var targetStyle = target.style;
+        var original = {};
+        for (var rule in rules) {
+            if (rules.hasOwnProperty(rule)) {
+                original[rule] = targetStyle[rule];
+                targetStyle[rule] = rules[rule];
+            }
+        }
+        return original;
+    };
+
+    /**
+     * Applies page scroll position. Returns original position.
+     * @param {{scrollTop: number, scrollLeft: number}} position Target position
+     * @returns {{scrollTop: number, scrollLeft: number}}
+     */
+    var applyScrollPosition = function (position) {
+        var bodyElement = (document.documentElement.scrollTop || document.documentElement.scrollLeft)
+            ? document.documentElement // Firefox, IE, Opera 12
+            : document.body; // Webkit
+        var original = {
+            scrollTop: bodyElement.scrollTop,
+            scrollLeft: bodyElement.scrollLeft
+        };
+        bodyElement.scrollTop = position.scrollTop;
+        bodyElement.scrollLeft = position.scrollLeft;
+        return original;
+    };
+
+    /**
+     * Styles for container to maximize map
+     * @type {object}
+     */
+    var containerStyle = {
+        "position": "absolute",
+        "width": "100%",
+        "height": "100%",
+        "top": "0",
+        "right": "0",
+        "bottom": "0",
+        "left": "0"
+    };
+
+    /**
+     * Styles for body to maximize map
+     * @type {object}
+     */
+    var bodyStyles = {
+        "overflow": "hidden",
+        // IE 6
+        "height": "100%",
+        "margin": "0",
+        "padding": "0",
+        "border": "0"
+    };
+
+    /**
      * Maximize Control
      * @property {L.Map} _map
      */
@@ -36,7 +99,7 @@
          * @private
          */
         _createButton: function () {
-            var container = L.DomUtil.create("div", "leaflet-control-maximize leaflet-bar leaflet-control");
+            var container = L.DomUtil.create("div", "leaflet-control-zoom leaflet-control-maximize leaflet-bar leaflet-control"); // Using "leaflet-control-zoom" class to avoid adding IE 6 styles for borders
 
             var button = L.DomUtil.create("a", "leaflet-control-maximize-button", container);
             button.innerHTML = "❐";
@@ -100,37 +163,12 @@
          */
         maximize: function () {
             if (!this.isMaximized()) {
-                var styles = this.getContainer().style;
-
-                // Save map container styles
-                this._restoreStylePosition = styles.position;
-                this._restoreStyleWidth = styles.width;
-                this._restoreStyleHeight = styles.height;
-                this._restoreStyleTop = styles.top;
-                this._restoreStyleRight = styles.right;
-                this._restoreStyleBottom = styles.bottom;
-                this._restoreStyleLeft = styles.left;
-
-                // Apply container styles
-                styles.position = "absolute";
-                styles.width = "auto";
-                styles.height = "auto";
-                styles.top = "0";
-                styles.right = "0";
-                styles.bottom = "0";
-                styles.left = "0";
-
-                // Hide scrollbars
-                this._restoreBodyElement = (document.documentElement.scrollTop || document.documentElement.scrollLeft)
-                    ? document.documentElement // Firefox, IE, Opera 12
-                    : document.body; // Webkit
-                this._restoreBodyScrollTop = this._restoreBodyElement.scrollTop;
-                this._restoreBodyScrollLeft = this._restoreBodyElement.scrollLeft;
-                this._restoreBodyOverflow = document.body.style.overflow;
-
-                this._restoreBodyElement.scrollTop = 0;
-                this._restoreBodyElement.scrollLeft = 0;
-                document.body.style.overflow = "hidden";
+                // Scroll page to the top
+                this._originalScrollPosition = applyScrollPosition({ scrollTop: 0, scrollLeft: 0 });
+                // Set body styles
+                this._originalBodyStyles = applyStyles(document.body, bodyStyles);
+                // Set container styles
+                this._originalContainerStyles = applyStyles(this.getContainer(), containerStyle);
 
                 this._isMaximized = true;
                 this.fire("maximizedstatechange");
@@ -142,21 +180,17 @@
          */
         restore: function () {
             if (this.isMaximized()) {
-                var styles = this.getContainer().style;
-
                 // Restore container styles
-                styles.position = this._restoreStylePosition;
-                styles.width = this._restoreStyleWidth;
-                styles.height = this._restoreStyleHeight;
-                styles.top = this._restoreStyleTop;
-                styles.right = this._restoreStyleRight;
-                styles.bottom = this._restoreStyleBottom;
-                styles.left = this._restoreStyleLeft;
+                applyStyles(this.getContainer(), this._originalContainerStyles);
+                // Restore body styles
+                applyStyles(document.body, this._originalBodyStyles);
+                // Restore scroll position
+                applyScrollPosition(this._originalScrollPosition);
 
-                // Restore scrollbars
-                document.body.style.overflow = this._restoreBodyOverflow;
-                this._restoreBodyElement.scrollTop = this._restoreBodyScrollTop;
-                this._restoreBodyElement.scrollLeft = this._restoreBodyScrollLeft;
+                // Cleanup
+                delete this._originalContainerStyles;
+                delete this._originalBodyStyles;
+                delete this._originalScrollPosition;
 
                 this._isMaximized = false;
                 this.fire("maximizedstatechange");
