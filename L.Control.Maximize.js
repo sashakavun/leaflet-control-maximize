@@ -1,6 +1,6 @@
 /**
  * L.Control.Maximize
- * 0.0.1
+ * 0.1
  *
  * Maximize Control plugin for Leaflet library
  * http://github.com/keta/L.Control.Maximize
