@@ -15,66 +15,45 @@
     /**
      * Applies style rules to the DOM object. Returns original rules.
      * @param {HTMLElement} target HTML element
-     * @param {object} rules CSS rules
-     * @returns {object}
+     * @param {string} rules CSS rules
+     * @returns {string}
      */
     var applyStyles = function (target, rules) {
-        var currentStyle = (target.currentStyle || getComputedStyle(target, null));
-        var original = {};
-        for (var rule in rules) {
-            if (rules.hasOwnProperty(rule)) {
-                original[rule] = currentStyle[rule];
-                target.style[rule] = rules[rule];
+        var currentStyles = target.getAttribute("style");
+        if (typeof(currentStyles) === "string") {
+            target.setAttribute("style", rules);
+        } else {  // IE 6 requires own approach
+            var styles = [];
+            var targetRules = rules.split(";");
+            var rulesCount = targetRules.length;
+            var i;
+            // Save current values before applying CSS rules
+            for (i = 0; i < rulesCount; i += 1) {
+                targetRules[i] = targetRules[i].split(":");
+                styles.push(targetRules[i][0], ":", target.style[targetRules[i][0]], ";");
             }
+            // Apply rules
+            for (i = 0; i < rulesCount; i += 1) {
+                target.style[targetRules[i][0]] = targetRules[i][1];
+            }
+            currentStyles = styles.join("");
         }
-        return original;
+        return currentStyles;
     };
 
     /**
      * Applies page scroll position. Returns original position.
-     * @param {{scrollTop: number, scrollLeft: number}} position Target position
-     * @returns {{scrollTop: number, scrollLeft: number}}
+     * @param {Array} position Target position
+     * @returns {Array}
      */
     var applyScrollPosition = function (position) {
-        var original = {
-            scrollTop: document.body.scrollTop || document.documentElement.scrollTop,
-            scrollLeft: document.body.scrollLeft || document.documentElement.scrollLeft
-        };
-        document.body.scrollTop = position.scrollTop;
-        document.body.scrollLeft = position.scrollLeft;
-        document.documentElement.scrollTop = position.scrollTop;
-        document.documentElement.scrollLeft = position.scrollLeft;
+        var documentElement = document.documentElement || document.body.parentNode || document.body;
+        var original = [
+            (typeof(window.pageXOffset) !== "undefined") ? window.pageXOffset : documentElement.scrollLeft,
+            (typeof(window.pageYOffset) !== "undefined") ? window.pageYOffset : documentElement.scrollTop
+        ];
+        window.scrollTo(position[0], position[1]);
         return original;
-    };
-
-    /**
-     * Styles for container to maximize map
-     * @type {object}
-     */
-    var containerStyle = {
-        "position": "absolute",
-        "width": "100%",
-        "height": "100%",
-        "top": "0",
-        "right": "0",
-        "bottom": "0",
-        "left": "0",
-        "margin": "0",
-        "padding": "0",
-        "border": "0"
-    };
-
-    /**
-     * Styles for body to maximize map
-     * @type {object}
-     */
-    var bodyStyles = {
-        "overflow": "hidden",
-        // IE 6
-        "height": "100%",
-        "margin": "0",
-        "padding": "0",
-        "border": "0"
     };
 
     /**
@@ -165,8 +144,11 @@
          */
         maximize: function () {
             if (!this.isMaximized()) {
+                var bodyStyles = "overflow:hidden;height:100%;margin:0;padding:0;border:0";
+                var containerStyle = "position:absolute;width:100%;height:100%;top:0;right:0;bottom:0;left:0;margin:0;padding:0;border:0";
+
                 // Scroll page to the top
-                this._originalScrollPosition = applyScrollPosition({ "scrollTop": 0, "scrollLeft": 0 });
+                this._originalScrollPosition = applyScrollPosition([0, 0]);
                 // Set body styles
                 this._originalBodyStyles = applyStyles(document.body, bodyStyles);
                 // Set container styles
