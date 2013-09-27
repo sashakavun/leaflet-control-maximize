@@ -11,10 +11,10 @@ Browser Support
 
 Plugin is tested and approved to work in the following browsers:
 
-* Chrome 29
-* Firefox 23
-* Internet Explorer 6-10
-* Opera 16
+* Chrome 29+
+* Firefox 23+
+* Internet Explorer 6+
+* Opera 12.16, 16+
 * Safari 5.1.16 (Windows)
 
 
