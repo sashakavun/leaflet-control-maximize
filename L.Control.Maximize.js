@@ -166,7 +166,7 @@
         maximize: function () {
             if (!this.isMaximized()) {
                 // Scroll page to the top
-                this._originalScrollPosition = applyScrollPosition({ scrollTop: 0, scrollLeft: 0 });
+                this._originalScrollPosition = applyScrollPosition({ "scrollTop": 0, "scrollLeft": 0 });
                 // Set body styles
                 this._originalBodyStyles = applyStyles(document.body, bodyStyles);
                 // Set container styles
