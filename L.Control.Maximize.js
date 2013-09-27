@@ -36,15 +36,14 @@
      * @returns {{scrollTop: number, scrollLeft: number}}
      */
     var applyScrollPosition = function (position) {
-        var bodyElement = (document.documentElement.scrollTop || document.documentElement.scrollLeft)
-            ? document.documentElement // Firefox, IE, Opera 12
-            : document.body; // Webkit
         var original = {
-            scrollTop: bodyElement.scrollTop,
-            scrollLeft: bodyElement.scrollLeft
+            scrollTop: document.body.scrollTop || document.documentElement.scrollTop,
+            scrollLeft: document.body.scrollLeft || document.documentElement.scrollLeft
         };
-        bodyElement.scrollTop = position.scrollTop;
-        bodyElement.scrollLeft = position.scrollLeft;
+        document.body.scrollTop = position.scrollTop;
+        document.body.scrollLeft = position.scrollLeft;
+        document.documentElement.scrollTop = position.scrollTop;
+        document.documentElement.scrollLeft = position.scrollLeft;
         return original;
     };
 
