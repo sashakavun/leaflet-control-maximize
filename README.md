@@ -18,6 +18,7 @@ Plugin is tested and approved to work in the following browsers:
 * Internet Explorer 6+
 * Opera 12.16, 16+
 * Safari 5.1.16 (Windows)
+* Safari on iPad 3 with iOS 6.1.3
 
 
 Usage
