@@ -129,7 +129,7 @@
         return new L.Control.Maximize(options);
     };
 
-    // Map option
+    // Map options
     L.Map.mergeOptions({
         maximizeControl: false,
         restoreFromMaximizedOnEsc: true
