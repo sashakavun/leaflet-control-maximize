@@ -19,12 +19,12 @@
      * @returns {object}
      */
     var applyStyles = function (target, rules) {
-        var targetStyle = target.style;
+        var currentStyle = (target.currentStyle || getComputedStyle(target, null));
         var original = {};
         for (var rule in rules) {
             if (rules.hasOwnProperty(rule)) {
-                original[rule] = targetStyle[rule];
-                targetStyle[rule] = rules[rule];
+                original[rule] = currentStyle[rule];
+                target.style[rule] = rules[rule];
             }
         }
         return original;
@@ -58,7 +58,10 @@
         "top": "0",
         "right": "0",
         "bottom": "0",
-        "left": "0"
+        "left": "0",
+        "margin": "0",
+        "padding": "0",
+        "border": "0"
     };
 
     /**
