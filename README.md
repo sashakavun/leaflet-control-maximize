@@ -5,7 +5,7 @@ Maximize Control plugin for Leaflet.
 
 Adds a button allowing user to maximize map to the whole page.
 
-Check out the [example](http://keta.github.io/L.Control.Maximize/example.html).
+Check out the [example](http://keta.github.io/leaflet-control-maximize/example.html).
 
 
 Browser Support
@@ -59,3 +59,20 @@ Following `L.Map` methods are available regardless of whether button is added to
 
 Also `L.Map` generates `maximizedstatechange` event on state change.
 
+
+Development
+-----------
+
+Project requires `npm` for development environment.
+
+To set up, run following command in the project's directory:
+
+```
+npm install
+```
+
+To build minified file, run `build` Grunt task in the project's directory:
+
+```
+grunt build
+```
