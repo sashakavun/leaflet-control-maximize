@@ -111,6 +111,10 @@
         return new L.Control.Maximize(options);
     };
 
+    // One-word shortcuts
+    L.MaximizeControl = L.Control.Maximize;
+    L.maximizeControl = L.control.maximize;
+
     // Map options
     L.Map.mergeOptions({
         maximizeControl: false,
