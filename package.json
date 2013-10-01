@@ -2,9 +2,13 @@
     "name": "leaflet-control-maximize",
     "version": "0.1.2",
     "description": "Maximize control for Leaflet library",
-    "main": "L.Control.Maximize.js",
+    "main": "leaflet-control-maximize.js",
     "repository": {
        "type": "git",
-        "url": "git://github.com/keta/L.Control.Maximize.git"
+        "url": "git://github.com/keta/leaflet-control-maximize.git"
+    },
+    "devDependencies": {
+        "grunt": "~0.4.1",
+        "grunt-contrib-uglify": "0.2.4"
     }
 }
