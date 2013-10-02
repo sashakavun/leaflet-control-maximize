@@ -22,7 +22,7 @@
         var currentStyles = target.getAttribute("style");
         if (typeof(currentStyles) === "string") {
             target.setAttribute("style", rules);
-        } else {  // IE 6 requires own approach
+        } else {  // IE 6 requires its own approach
             var styles = [];
             var targetRules = rules.split(";");
             var rulesCount = targetRules.length;
@@ -83,7 +83,7 @@
             var container = L.DomUtil.create("div", "leaflet-control-zoom leaflet-control-maximize leaflet-bar leaflet-control"); // Using "leaflet-control-zoom" class to avoid adding IE 6 styles for borders
 
             var button = L.DomUtil.create("a", "leaflet-control-maximize-button", container);
-            button.innerHTML = "❐";
+            button.innerHTML = "&#10064;";
             button.href = "#";
             button.title = this.options.title;
             L.DomEvent.on(button, "click", this._onClick, this);
@@ -196,8 +196,7 @@
     L.Map.addInitHook(function () {
         if (this.options.maximizeControl) {
             // Add control if requested in options
-            this.maximizeControl = L.control.maximize();
-            this.maximizeControl.addTo(this);
+            this.maximizeControl = L.control.maximize().addTo(this);
         }
 
         // Updates map on maximization and restore
