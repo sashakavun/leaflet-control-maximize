@@ -56,6 +56,8 @@
         return original;
     };
 
+    var containerMaximizedClassName = "leaflet-maximized";
+
     /**
      * Maximize Control
      * @property {L.Map} _map
@@ -150,13 +152,17 @@
             if (!this.isMaximized()) {
                 var bodyStyles = "overflow:hidden;height:100%;margin:0;padding:0;border:0";
                 var containerStyle = "position:absolute;width:100%;height:100%;top:0;right:0;bottom:0;left:0;margin:0;padding:0;border:0";
+                var container = this.getContainer();
 
                 // Scroll page to the top
                 this._originalScrollPosition = applyScrollPosition([0, 0]);
                 // Set body styles
                 this._originalBodyStyles = applyStyles(document.body, bodyStyles);
                 // Set container styles
-                this._originalContainerStyles = applyStyles(this.getContainer(), containerStyle);
+                this._originalContainerStyles = applyStyles(container, containerStyle);
+
+                // Add maximized state class name to the map container
+                L.DomUtil.addClass(container, containerMaximizedClassName);
 
                 this._isMaximized = true;
                 this.fire("maximizedstatechange");
@@ -168,8 +174,10 @@
          */
         restore: function () {
             if (this.isMaximized()) {
+                var container = this.getContainer();
+
                 // Restore container styles
-                applyStyles(this.getContainer(), this._originalContainerStyles);
+                applyStyles(container, this._originalContainerStyles);
                 // Restore body styles
                 applyStyles(document.body, this._originalBodyStyles);
                 // Restore scroll position
@@ -179,6 +187,9 @@
                 delete this._originalContainerStyles;
                 delete this._originalBodyStyles;
                 delete this._originalScrollPosition;
+
+                // Remove maximized class name from container (bulletproof way)
+                L.DomUtil.removeClass(container, containerMaximizedClassName);
 
                 this._isMaximized = false;
                 this.fire("maximizedstatechange");
