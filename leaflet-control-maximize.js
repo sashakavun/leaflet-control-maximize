@@ -19,7 +19,7 @@
      * @returns {string}
      */
     var applyStyles = function (target, rules) {
-        var currentStyles = target.getAttribute("style");
+        var currentStyles = target.getAttribute("style") || "";
         if (typeof(currentStyles) === "string") {
             target.setAttribute("style", rules);
         } else {  // IE 6 requires its own approach
